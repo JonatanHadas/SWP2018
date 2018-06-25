@@ -1,7 +1,7 @@
-Full Name 1: 
-Id No 1: 
-User Name 1: 
-Full Name 2: 
-Id No 2: 
-User Name 2: 
+Full Name 1: Eduard Gorohovski
+Id No 1: 306559592
+User Name 1: eduardg
+Full Name 2: Jonatan Hadas
+Id No 2: 318773066
+User Name 2: jonatanhadas
 Assignment: Final Project
