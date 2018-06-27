@@ -31,7 +31,7 @@ Board* copy_board(Board* board);
 /*
 prints given board
 */
-void print_board(Board* board);
+void print_board(Board* board, bool mark_errors);
 
 /*
 check if position is erroneous
