@@ -5,7 +5,13 @@ COMP_FLAGS = -ansi -Wall -Wextra \
 
 EXEC = sudoku-console
 
-OBJS = main.o
+# header files
+HEADS = game.h solver.h parser.h
+
+# generate object file names for header files  (replace every ".h" with a ".o")
+OBJS = $(patsubst %.h,%.o, $(HEADS))
+# add main object file (has no header)
+OBJS += main.o
 
 all: $(EXEC)
 
@@ -13,8 +19,8 @@ $(EXEC): $(OBJS)
 	$(CC) $(COMP_FLAGS) $^ -o $@ 
 #compile all prerequisites into target
 
-#.c file required for .o creation
-main.o: $*.c 
+#.c file and headers required for .o creation
+main.o: $*.c $(HEADS)
 	$(CC) $(COMP_FLAGS) -c $<
 
 clean:
