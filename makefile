@@ -20,7 +20,13 @@ $(EXEC): $(OBJS)
 #compile all prerequisites into target
 
 #.c file and headers required for .o creation
-main.o: $*.c $(HEADS)
+main.o: main.c $(HEADS)
+	$(CC) $(COMP_FLAGS) -c $<
+game.o: game.c $(HEADS)
+	$(CC) $(COMP_FLAGS) -c $<
+solver.o: solver.c $(HEADS)
+	$(CC) $(COMP_FLAGS) -c $<
+parser.o: parser.c $(HEADS)
 	$(CC) $(COMP_FLAGS) -c $<
 
 clean:

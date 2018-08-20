@@ -30,8 +30,10 @@ Board* copy_board(Board* board);
 
 /*
 prints given board
+
+marks errors if mark_errors!=0
 */
-void print_board(Board* board, bool mark_errors);
+void print_board(Board* board, int mark_errors);
 
 /*
 check if position is erroneous

@@ -4,16 +4,16 @@
 parser module, contains functions to get commands from terminal
 */
 
-enum GameMode{
+typedef enum game_mode_enum{
 	MODE_INIT,
 	MODE_SOLVE,
 	MODE_EDIT
-};
+} GameMode;
 
 /*
 possible types of commands
 */
-enum CommandType{
+typedef enum command_type_enum{
 	CMD_SOLVE,
 	CMD_EDIT,
 	CMD_MARK_ERRS,
@@ -29,7 +29,7 @@ enum CommandType{
 	CMD_AUTOFILL,
 	CMD_RESET,
 	CMD_EXIT
-};
+} CommandType;
 
 
 /*
