@@ -4,6 +4,8 @@
 parser module, contains functions to get commands from terminal
 */
 
+#include <stdbool.h> /* boolean type */
+
 #define MAX_COMMAND_LENGTH 256
 #define MAX_PARAM_NUM 3
 
@@ -39,7 +41,7 @@ typedef enum command_type_enum{
 extracts an integer from "str" into "param",
 returns whether succeeded
 */
-bool get_int_param(char* str, int* param){
+bool get_int_param(char* str, int* param);
 
 /*
 gets command from command line,
