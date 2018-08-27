@@ -36,13 +36,10 @@ typedef enum command_type_enum{
 
 
 /*
-extracts "num" integers from "str" into "params"
-returns whether it is successful
-
-params must be alocated with at least "num" positions after it
+extracts an integer from "str" into "param",
+returns whether succeeded
 */
-bool get_int_params(char* str, int* params, int num);
-
+bool get_int_param(char* str, int* param){
 
 /*
 gets command from command line,
