@@ -4,6 +4,9 @@
 parser module, contains functions to get commands from terminal
 */
 
+#define MAX_COMMAND_LENGTH 256
+#define MAX_PARAM_NUM 3
+
 typedef enum game_mode_enum{
 	MODE_INIT,
 	MODE_SOLVE,
@@ -33,12 +36,18 @@ typedef enum command_type_enum{
 
 
 /*
+extracts an integer from "str" into "param",
+returns whether succeeded
+*/
+bool get_int_param(char* str, int* param){
+
+/*
 gets command from command line,
 given the game mode (init, solve or edit)
 returns type of command
-outputs integer parameters (if any) to num_param
-outputs a string parameter (if any) to str_param
+outputs parameters (if any) to params
+output number of parameters to param_num
 */
-CommandType get_command(GameMode mode, int* num_param, char* str_param);
+CommandType get_command(GameMode mode, char** params, int* param_num);
 
 #endif
