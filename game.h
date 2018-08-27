@@ -4,6 +4,7 @@
 game module, contains functions and structures for saving game state
 */
 
+#include <stdbool.h> /* boolean type */
 
 /*
 structure for saving a game board
@@ -39,12 +40,12 @@ void print_board(Board* board, int mark_errors);
 check if position is erroneous
 returns 1 if it is and 0 if it isn't
 */
-int check_position(Board* board, int x, int y);
+bool check_position(Board* board, int x, int y);
 
 /*
 check if any position is erroneous in given board
 */
-int check_board(Board* board);
+bool check_board(Board* board);
 
 /*
 prints all changes made to go from first board to second
