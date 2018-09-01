@@ -149,7 +149,7 @@ void print_changes(Board* first, Board* second, ChangeType t){
 BoardListNode* create_board_node(){
 	BoardListNode* node; /* new node */
 	
-	node = malloc(sizeof(BoardListNode()));
+	node = malloc(sizeof(BoardListNode));
 	
 	if(node == NULL) return NULL; /* return null pointer on failure */
 	
@@ -161,8 +161,8 @@ BoardListNode* create_board_node(){
 void free_board_list(BoardListNode* node){
 	BoardListNode* next; /* next node */
 	
-	/* erase pointer to here */
-	if(node->prev) node->prev->next = NULL; 
+	/* erase next pointer of previous node if it still leads here */
+	if(node->prev && node->prev->next == node) node->prev->next = NULL; 
 	
 	while(node){ /* loop until end of list */
 		next = node->next; /* save next node */
@@ -170,4 +170,65 @@ void free_board_list(BoardListNode* node){
 		free(node); /* delete current node */
 		node = next; /* go to next node */
 	}
+}
+
+Game* create_game(int cell_w, int cell_h){
+	Game* game;
+	int i;
+	
+	/* allocate game structure */
+	game = malloc(sizeof(Game));
+	
+	if(game==NULL) return NULL; /* return NULL on failure */
+	
+	/* create list of one state */
+	game->undo_list_head = game->undo_list_tail = game->current_state = create_board_node();
+	
+	if(game->undo_list_head == NULL){
+		free(game);
+		return NULL;
+	}
+	
+	game->current_state->board = create_board(cell_w, cell_h);
+	
+	if(game->current_state->board == NULL){
+		free_board_list(game->undo_list_head);
+		free(game);
+		return NULL;
+	}
+	
+	/* allocate memory for fixed cells */
+	game->memory = calloc(cell_w*cell_w*cell_h*cell_h, sizeof(bool));
+	
+	if(game->memory == NULL){
+		free_board_list(game->undo_list_head);
+		free(game);
+		return NULL;
+	}
+	
+	/* allocate cell_w*cell_h row pointers */
+	game->fixed = calloc(cell_w*cell_h, sizeof(bool*));
+	
+	if(game->fixed == NULL){
+		free(game->memory);
+		free_board_list(game->undo_list_head);
+		free(game);
+		return NULL;
+	}
+	
+	/* set row pointers */
+	for(i = 0; i<cell_w*cell_h; i++){
+		/* i'th row starts at i*cell_w*cell_h (cell_w*cell_h cells in a row */
+		game->fixed[i] = game->memory + i*cell_w*cell_h;
+	}
+	
+	return game;
+	
+}
+
+void free_game(Game* game){
+	free(game->fixed);
+	free(game->memory);
+	free_board_list(game->undo_list_head); /* erase all undo list */
+	free(game);
 }
