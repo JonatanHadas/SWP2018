@@ -30,13 +30,6 @@ creates copy of given board
 Board* copy_board(Board* board);
 
 /*
-prints given board
-
-marks errors if mark_errors!=0
-*/
-void print_board(Board* board, int mark_errors);
-
-/*
 check if position is erroneous
 returns 1 if it is and 0 if it isn't
 */
@@ -114,6 +107,11 @@ if use_fixed is false: does not load whether cells are fixed
 */
 Game* load_board(char* filename, bool use_fixed);
 
+/*
+prints board for given game
 
+marks errors if mark_errors!=0
+*/
+void print_board(Game* game, bool mark_errors);
 
 #endif
