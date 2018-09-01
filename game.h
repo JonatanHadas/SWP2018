@@ -4,6 +4,10 @@
 game module, contains functions and structures for saving game state
 */
 
+/*
+remark: cell here and in source file for this header means block
+*/
+
 #include <stdbool.h> /* boolean type */
 
 /*
@@ -102,8 +106,10 @@ void free_game(Game* game);
 
 /*
 adds new state to end of undo list, identical to last
+
+returns whether successful
 */
-void add_state(Game* game);
+bool add_state(Game* game);
 
 /*
 save game state to file

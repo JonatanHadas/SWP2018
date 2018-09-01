@@ -232,3 +232,83 @@ void free_game(Game* game){
 	free_board_list(game->undo_list_head); /* erase all undo list */
 	free(game);
 }
+
+bool add_state(Game* game){
+	/* create new node */
+	game->undo_list_tail->next = create_board_node();
+	
+	if(game->undo_list_tail->next == NULL) return false; /* unsuccessful */
+	
+	/* connect node back to tail of undo list */
+	game->undo_list_tail->next->prev = game->undo_list_tail;
+
+	/* copy last board to new state */
+	game->undo_list_tail->next->board = copy_board(game->undo_list_tail->board);
+	
+	if(game->undo_list_tail->next->board == NULL){ /* failure */
+		free_board_list(game->undo_list_tail->next); /* delete new node */
+		return false;
+	}
+	
+	
+	/* mode tail of undo list to new node */
+	game->undo_list_tail = game->undo_list_tail->next;
+	
+	
+	return true;
+}
+
+void print_seperator_line(Game* game){
+	int cell_w,cell_h,i;
+	
+	/* save cell width and height (for convenience and readability) */
+	cell_w = game->current_state->board->cell_w;
+	cell_h = game->current_state->board->cell_h;
+	
+	for(i = 0; i<(4*cell_w + 1)*cell_h + 1; i++) printf("-"); /* cell_h cells 4*cell_w wide with 1 character separators */
+	
+	printf("\n");
+}
+
+void print_board(Game* game, bool mark_errors){
+	Board* board = game->current_state->board; /* get board */
+	int x,y; /* position index within cell*/
+	int cell_x, cell_y; /* cell index */
+	
+	print_seperator_line(game);
+	
+	for(cell_y = 0; cell_y < board->cell_w; cell_y++){ /* board is cell_w cells high */
+		for(y = 0; y < board->cell_h; y++){ /* cell_h rows in a cell */
+			printf("|"); /* separator */
+			
+			for(cell_x = 0; cell_x < board->cell_h; cell_x++){ /* board is cell_h cell wide */
+				for(x = 0; x < board->cell_w; x++){ /* cell_w columns in a cell */
+					int global_x = x + board->cell_w * cell_x; /* global coordinates of current position */
+					int global_y = y + board->cell_h * cell_y;
+					
+					char type = ' '; /* specifies cell type (.fixed, *erronous,  regular) */
+					
+					if(game->fixed[global_y][global_x]){
+						type = '.'; /* fixed */
+					}
+					/* if erronous and not fixed: mark erronous */
+					if(type == ' ' && mark_errors && check_position(board, global_x, global_y)){
+						type = '*';
+					}
+					printf(" ");
+					if(board->table[global_y][global_x] != 0){
+						printf("%2d",board->table[global_y][global_x]); /* print number */
+					}
+					else{
+						printf("  "); /* empty cell */
+					}
+					printf("%c", type);
+				}
+				printf("|");				
+			}
+			
+			printf("\n"); /* end of line */
+		}
+		print_seperator_line(game);
+	}
+}
