@@ -80,8 +80,8 @@ typedef struct game{
 	BoardListNode* undo_list_tail; /* last state */
 	BoardListNode* current_state; /* current state of game */
 	
-	int* memory; /* memory saving whether cells are fixed */
-	int** fixed; /* array of pointers to rows in memory*/
+	bool* memory; /* memory saving whether cells are fixed */
+	bool** fixed; /* array of pointers to rows in memory*/
 } Game;
 
 /*
@@ -104,13 +104,13 @@ save game state to file
 
 if all_fixed is true: save all non-empty cells as fixed
 */
-void save_board(Game* game, char* filename, int all_fixed);
+void save_board(Game* game, char* filename, bool all_fixed);
 /*
 load game state from file
 
 if use_fixed is false: does not load whether cells are fixed
 */
-Game* load_board(char* filename, int use_fixed);
+Game* load_board(char* filename, bool use_fixed);
 
 
 
