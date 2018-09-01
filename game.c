@@ -146,3 +146,28 @@ void print_changes(Board* first, Board* second, ChangeType t){
 	}
 }
 
+BoardListNode* create_board_node(){
+	BoardListNode* node; /* new node */
+	
+	node = malloc(sizeof(BoardListNode()));
+	
+	if(node == NULL) return NULL; /* return null pointer on failure */
+	
+	node->next = node->prev = NULL; /* initialize values */
+	node->board = NULL;
+	return node;
+}
+
+void free_board_list(BoardListNode* node){
+	BoardListNode* next; /* next node */
+	
+	/* erase pointer to here */
+	if(node->prev) node->prev->next = NULL; 
+	
+	while(node){ /* loop until end of list */
+		next = node->next; /* save next node */
+		if(node -> board) free_board(node->board); /* delete board if there is one */
+		free(node); /* delete current node */
+		node = next; /* go to next node */
+	}
+}
