@@ -312,3 +312,60 @@ void print_board(Game* game, bool mark_errors){
 		print_seperator_line(game);
 	}
 }
+
+bool save_board(Game* game, char* filename, bool all_fixed){
+	Board* board = game->current_state->board; /* for convenience */
+	FILE* file = fopen(filename,"w");
+	int x,y;
+	
+	if(file == NULL) return false; /* unsuccessful in opening file */
+	
+	/* save cell size */
+	fprintf(file, "%d %d\n", board->cell_h, board->cell_w);
+	
+	/* go over rows */
+	for(y = 0; y < board->cell_w * board->cell_h; y++){
+		/* go over columns */
+		for(x = 0; x < board->cell_w * board->cell_h; x++){
+			if(x != 0) fprintf(file, " "); /* separator space */
+			fprintf(file, "%d", board->table[y][x]);
+			/* if all_fixed is true, position is marked fixed if it is not empty */
+			if((all_fixed && board->table[y][x]!=0) || game->fixed[y][x]) fprintf(file, "."); /* mark fixed cells */
+		}
+		fprintf(file, "\n"); /* end line */
+	}
+	
+	
+	fclose(file);
+	return true;
+}
+
+Game* load_board(char* filename, bool use_fixed){
+	Game* game;
+	int cell_w, cell_h,pos;
+	FILE* file = fopen(filename, "r");
+	
+	if(file == NULL){
+		return NULL; /* unsuccessful in opening file */
+	}
+	
+	fscanf(file, "%d%d", &cell_h, &cell_w);
+
+	game = create_game(cell_w, cell_h);
+	
+	if(game == NULL){
+		fclose(file);
+		return NULL; /* unsuccessful allocation */
+	}
+	
+	
+	/* saving oreder is same as oreder in memory */
+	for(pos = 0; pos < cell_w * cell_h * cell_w * cell_h; pos++){
+		char fixed_marker;
+		fscanf(file,"%d%c", (game->current_state->board->memory) + pos, &fixed_marker); /* get number and character after it (could be fixed marker) */
+		
+		if(use_fixed && fixed_marker == '.') game->memory[pos] = true; /* mark position as fixed */ 
+	}
+	
+	return game;
+}
