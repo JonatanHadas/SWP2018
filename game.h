@@ -103,8 +103,10 @@ void add_state(Game* game);
 save game state to file
 
 if all_fixed is true: save all non-empty cells as fixed
+
+returns whether saving is successful (errors in file operations are possible)
 */
-void save_board(Game* game, char* filename, bool all_fixed);
+bool save_board(Game* game, char* filename, bool all_fixed);
 /*
 load game state from file
 
