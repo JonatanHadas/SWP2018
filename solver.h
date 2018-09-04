@@ -9,6 +9,8 @@ contains functions for solving sudoku boards
 
 /*
 generates a solved copy of given board, returns null pointer if no solution exists
+on failure returns same pointer
+on allocation error returns null
 */
 Board* solve(Board* board);
 
