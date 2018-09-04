@@ -127,13 +127,13 @@ void print_change(int x, int y, int z1, int z2, ChangeType t){
 	if(z2==0){s2[0] = '_'; s2[1] = '\0';} /* _ for empty cell */
 	switch(t){
 	case CHANGE_UNDO:
-		printf("Undo %d,%d: from %s to %s\n", x,y,s1,s2);
+		printf("Undo %d,%d: from %s to %s\n", x+1,y+1,s1,s2);
 		break;
 	case CHANGE_REDO:
-		printf("Redo %d,%d: from %s to %s\n", x,y,s1,s2);
+		printf("Redo %d,%d: from %s to %s\n", x+1,y+1,s1,s2);
 		break;
 	case CHANGE_SET:
-		printf("Cell <%d,%d> set to %d\n", x,y,z2);
+		printf("Cell <%d,%d> set to %d\n", x+1,y+1,z2);
 		break;
 	}
 }
@@ -176,6 +176,12 @@ void free_board_list(BoardListNode* node){
 		node = next; /* go to next node */
 	}
 }
+
+void replace_node_board(BoardListNode* node, Board* board){
+	if(node -> board && node->board!=board) free_board(node->board); /* delete old board if it is not the same one */
+	node->board = board;
+}
+
 
 Game* create_game(int cell_w, int cell_h){
 	Game* game;

@@ -81,6 +81,12 @@ free a board node, and all board nodes after it
 */
 void free_board_list(BoardListNode* node);
 
+/*
+replace board in given node to given board
+
+frees old board if it is not null
+*/
+void replace_node_board(BoardListNode* node, Board* board);
 
 /*
 state of a sudoku game, intc
