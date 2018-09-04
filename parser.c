@@ -42,7 +42,7 @@ bool is_valid(CommandType comm, GameMode mode){
 returns pointer to first nne whitespace character in given str
 */
 char* skip_blank(char* str){
-	while(isblank(*str)) str++;
+	while(isspace(*str)) str++;
 	return str;
 }
 
@@ -93,7 +93,7 @@ bool compare_command(char* str, const char* comm){
 	
 	/* by this point it is known that str starts with comm */
 	if( str[comm_len] == '\0') return true; /* it ends there */
-	if( isblank(str[comm_len]) ) return true; /* comm is followed by blank char */
+	if( isspace(str[comm_len]) ) return true; /* comm is followed by blank char */
 	
 	return false; /* does not match */
 }
@@ -104,7 +104,7 @@ copies src to dst until blank or null char is reached
 returns position where it stopped
 */
 char* copy_until_blank(char* src, char* dst){
-	while(*src && !isblank(*src)) *dst++ = *src++; /* copy and advance */
+	while(*src && !isspace(*src)) *dst++ = *src++; /* copy and advance */
 	*dst = '\0';
 	return src;
 }
