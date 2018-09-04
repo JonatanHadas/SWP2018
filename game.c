@@ -120,12 +120,17 @@ print a change in the board given coordinates and values
 value at coordinate x,y is changed from z1 to z2
 */
 void print_change(int x, int y, int z1, int z2, ChangeType t){
+	char s1[3],s2[3]; /* strings for z1,z2 respectively */
+	sprintf(s1,"%d",z1); /* convert */
+	if(z1==0){s1[0] = '_'; s1[1] = '\0';} /* _ for empty cell */
+	sprintf(s2,"%d",z2); /* convert */
+	if(z2==0){s2[0] = '_'; s2[1] = '\0';} /* _ for empty cell */
 	switch(t){
 	case CHANGE_UNDO:
-		printf("Undo %d,%d: from %d to %d\n", x,y,z1,z2);
+		printf("Undo %d,%d: from %s to %s\n", x,y,s1,s2);
 		break;
 	case CHANGE_REDO:
-		printf("Redo %d,%d: from %d to %d\n", x,y,z1,z2);
+		printf("Redo %d,%d: from %s to %s\n", x,y,s1,s2);
 		break;
 	case CHANGE_SET:
 		printf("Cell <%d,%d> set to %d\n", x,y,z2);
