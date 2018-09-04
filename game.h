@@ -4,6 +4,10 @@
 game module, contains functions and structures for saving game state
 */
 
+/*
+remark: cell here and in source file for this header means block
+*/
+
 #include <stdbool.h> /* boolean type */
 
 /*
@@ -40,10 +44,23 @@ check if any position is erroneous in given board
 */
 bool check_board(Board* board);
 
+
+/*
+possible types of changes, used to determine print format (see next function)
+*/
+typedef enum change_type_enum{
+	CHANGE_UNDO,CHANGE_REDO, CHANGE_SET
+} ChangeType;
+
 /*
 prints all changes made to go from first board to second
+
+use change-type to determine how printing should be done
+(Undo x,y: from z1 to z2)
+(Redo x,y: from z1 to z2)
+(Cell <x,y>: set to z)
 */
-void print_changes(Board* first, Board* second);
+void print_changes(Board* first, Board* second, ChangeType t);
 
 
 /*
@@ -89,8 +106,10 @@ void free_game(Game* game);
 
 /*
 adds new state to end of undo list, identical to last
+
+returns whether successful
 */
-void add_state(Game* game);
+bool add_state(Game* game);
 
 /*
 save game state to file
