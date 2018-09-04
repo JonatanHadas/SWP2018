@@ -62,6 +62,15 @@ use change-type to determine how printing should be done
 */
 void print_changes(Board* first, Board* second, ChangeType t);
 
+/*
+returns number of empty places in given board
+
+positions of these places, by their order is put in xs,ys, if they are not NULL.
+
+xs and ys must be at least (cell_w * cell_h)^2 long (size of board)
+*/
+int count_empty_places(Board* board, int* xs, int* ys);
+
 
 /*
 doubly linked list node containing a board;

@@ -151,6 +151,25 @@ void print_changes(Board* first, Board* second, ChangeType t){
 	}
 }
 
+int count_empty_places(Board* board, int* xs, int* ys){
+	int count=0,x,y;
+	
+	/* go over board */
+	for(y = 0; y < board->cell_w * board->cell_h; y++){
+		for(x = 0; x < board->cell_w * board->cell_h; x++){
+			if(board->table[y][x] == 0){
+				if(xs != NULL && ys != NULL){
+					xs[count] = x;
+					ys[count] = y;
+				}
+				count++;
+			}
+		}
+	}
+	
+	return count;
+}
+
 BoardListNode* create_board_node(){
 	BoardListNode* node; /* new node */
 	

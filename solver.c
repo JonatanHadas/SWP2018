@@ -1,31 +1,6 @@
 #include "solver.h"
 
 #include <stdlib.h> /* malloc */
-#include <stdio.h>
-
-/*
-returns number of empty places in given board
-
-positions of these places, by their order is put in xs,ys.
-
-xs and ys must be at least (cell_w * cell_h)^2 long (size of board)
-*/
-int count_empty_places(Board* board, int* xs, int* ys){
-	int count=0,x,y;
-	
-	/* go over board */
-	for(y = 0; y < board->cell_w * board->cell_h; y++){
-		for(x = 0; x < board->cell_w * board->cell_h; x++){
-			if(board->table[y][x] == 0){
-				xs[count] = x;
-				ys[count] = y;
-				count++;
-			}
-		}
-	}
-	
-	return count;
-}
 
 int count_solutions(Board* board){
 	int empty_num; /* number of empty places */
