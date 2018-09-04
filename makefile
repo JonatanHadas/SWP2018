@@ -1,9 +1,13 @@
 CC = gcc
 
+GUROBI_COMP = -I/usr/local/lib/gurobi563/include
+GUROBI_LIB = -L/usr/local/lib/gurobi563/lib -lgurobi56
+
 COMP_FLAGS = -ansi -Wall -Wextra \
--Werror -pedantic-errors
+-Werror -pedantic-errors $(GUROBI_COMP)
 
 EXEC = sudoku-console
+
 
 # header files
 HEADS = game.h solver.h parser.h game_adv.h
@@ -16,7 +20,7 @@ OBJS += main.o
 all: $(EXEC)
 
 $(EXEC): $(OBJS)
-	$(CC) $(COMP_FLAGS) $^ -o $@ 
+	$(CC) $(COMP_FLAGS) $^ $(GUROBI_LIB) -o $@ 
 #compile all prerequisites into target
 
 #.c file and headers required for .o creation
