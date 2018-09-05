@@ -407,10 +407,15 @@ Game* load_board(char* filename, bool use_fixed){
 	FILE* file = fopen(filename, "r");
 	
 	if(file == NULL){
+		fprintf("Error: File doesn’t exist or cannot be opened\n");
 		return NULL; /* unsuccessful in opening file */
 	}
 	
-	fscanf(file, "%d%d", &cell_h, &cell_w);
+	if(fscanf(file, "%d%d", &cell_h, &cell_w) != 2){
+		fprintf("Error: fscanf has failed\n");
+		fclose(file);
+		return NULL;
+	}
 
 	game = create_game(cell_w, cell_h);
 	
@@ -423,7 +428,12 @@ Game* load_board(char* filename, bool use_fixed){
 	/* saving oreder is same as oreder in memory */
 	for(pos = 0; pos < cell_w * cell_h * cell_w * cell_h; pos++){
 		char fixed_marker;
-		fscanf(file,"%d%c", (game->current_state->board->memory) + pos, &fixed_marker); /* get number and character after it (could be fixed marker) */
+		if(fscanf(file,"%d%c", (game->current_state->board->memory) + pos, &fixed_marker) != 2){ /* get number and character after it (could be fixed marker) */
+			fprintf("Error: fscanf has failed\n");
+			free_game(game);
+			fclose(file);
+			return NULL;
+		}
 		
 		if(use_fixed && fixed_marker == '.') game->memory[pos] = true; /* mark position as fixed */ 
 	}
