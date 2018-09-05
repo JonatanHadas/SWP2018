@@ -26,6 +26,9 @@ void hint(Board* b, int x, int y);
 
 /*
 given a non erronous board, returns a copy with obvious values added
+on error (in allocation) returns NULL
+
+if no changes are made, returns board
 */
 Board* autofill(Board* b);
 
