@@ -6,7 +6,7 @@ COMP_FLAGS = -ansi -Wall -Wextra \
 EXEC = sudoku-console
 
 # header files
-HEADS = game.h solver.h parser.h game_adv.h
+HEADS = game.h solver.h parser.h game_adv.h game_main.h
 
 # generate object file names for header files  (replace every ".h" with a ".o")
 OBJS = $(patsubst %.h,%.o, $(HEADS))
@@ -29,6 +29,8 @@ game_adv.o: game_adv.c $(HEADS)
 solver.o: solver.c $(HEADS)
 	$(CC) $(COMP_FLAGS) -c $<
 parser.o: parser.c $(HEADS)
+	$(CC) $(COMP_FLAGS) -c $<
+game_main.o: game_main.c $(HEADS)
 	$(CC) $(COMP_FLAGS) -c $<
 
 clean:
