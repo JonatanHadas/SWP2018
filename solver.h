@@ -16,6 +16,8 @@ Board* solve(Board* board);
 
 /*
 returns number of possible solutions to given board
+
+also prints gurobi errors
 */
 int count_solutions(Board* board);
 
