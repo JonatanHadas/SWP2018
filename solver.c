@@ -1,6 +1,7 @@
 #include "solver.h"
 
 #include <stdlib.h> /* malloc */
+#include <stdio.h>
 
 bool count_solutions(Board* board, int* number){
 	int empty_num; /* number of empty places */
@@ -65,7 +66,7 @@ bool count_solutions(Board* board, int* number){
 	free(x_stack);
 	free(y_stack);
 	
-	number = count;
+	*number = count;
 	return true; /* success */
 }
 

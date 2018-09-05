@@ -24,8 +24,10 @@ Board* generate(Board* b, int add, int remaining);
 tries to print hint for given board on given position
 
 if no hint can be made, prints message explaining why
+
+return true of fatal error
 */
-void hint(Game* g, int x, int y);
+bool hint(Game* g, int x, int y);
 
 /*
 given a non erronous board, returns a copy with obvious values added

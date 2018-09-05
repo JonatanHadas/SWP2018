@@ -41,37 +41,38 @@ Board* autofill(Board* board){
 	return new_board;
 }
 
-void hint(Game* g, int x, int y){
+bool hint(Game* g, int x, int y){
 	Board* board = g->current_state->board; /* get currnet board */
 	Board* sol; /* solution */
 	
 	/* check for immediate errors */
 	if(check_board(board)){
 		fprintf(stderr, "Error: board contains erroneous values\n");
-		return;
+		return false;
 	}
 	/* cell must be empty and non fixed */
 	if(g->fixed[y][x]){
 		fprintf(stderr, "Error: cell is fixed\n");
-		return;
+		return false;
 	}
 	
 	if(board->table[y][x] != 0){
 		fprintf(stderr, "Error: cell already contains a value\n");
-		return;
+		return false;
 	}
 	sol = solve(board);
 	if(sol == NULL){
-		return; /* some error in solution */
+		return true; /* some error in solution */
 	}
 	if(sol == board){ /* unsolvable */
 		fprintf(stderr, "Error: board is unsolvable\n");
-		return;
+		return false;
 	}
 	
 	printf("Hint: set cell to %d\n", sol->table[y][x]); /* print hint */
 	
 	free_board(sol);
+	return false;
 }
 
 /*
