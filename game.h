@@ -71,6 +71,16 @@ xs and ys must be at least (cell_w * cell_h)^2 long (size of board)
 */
 int count_empty_places(Board* board, int* xs, int* ys);
 
+/*
+returns number of legal values for given empty position on given board
+
+if "z" is not null, outputs legal values to "z"
+z must be null or allocated with length cell_w*cell_h at least
+
+if position is not empty returns -1
+*/
+int count_legal_values(Board* board, int x, int y, int* z);
+
 
 /*
 doubly linked list node containing a board;
