@@ -76,21 +76,25 @@ Board* solve(Board* board){
 	/* allocations, N^3 variables, N variables per condition */
 	sol = calloc(N*N*N, sizeof(double));
 	if(sol == NULL){
+		fprintf(stderr,"Error: calloc has failed\n");
 		return NULL;
 	}
 	vtype = calloc(N*N*N, sizeof(char));
 	if(vtype == NULL){
+		fprintf(stderr,"Error: calloc has failed\n");
 		free(sol);
 		return NULL;
 	}
 	ind = calloc(N, sizeof(int));
 	if(ind == NULL){
+		fprintf(stderr,"Error: calloc has failed\n");
 		free(sol);
 		free(vtype);
 		return NULL;
 	}
 	val = calloc(N, sizeof(double));
 	if(val == NULL){
+		fprintf(stderr,"Error: calloc has failed\n");
 		free(sol);
 		free(vtype);
 		free(ind);
@@ -98,6 +102,7 @@ Board* solve(Board* board){
 	}
 	obj = calloc(N*N*N, sizeof(double));
 	if(val == NULL){
+		fprintf(stderr,"Error: calloc has failed\n");
 		free(sol);
 		free(vtype);
 		free(ind);
