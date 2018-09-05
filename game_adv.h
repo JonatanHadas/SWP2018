@@ -13,7 +13,10 @@ autofill, hint finding etc
 /*
 generates board by adding "add" random leagal values, solving, then removing cells until "remaining" cells remain
 
-on failure, returns NULL
+on error, returns NULL
+on failure, returns "b"
+
+assumes board is empty
 */
 Board* generate(Board* b, int add, int remaining);
 
