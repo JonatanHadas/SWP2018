@@ -60,11 +60,18 @@ print board of given game state
 void print_game(GameState* state);
 
 /*
-validate current state of game state
+validate current state of game state and print results
 
 returns true if fatal error occurred
 */
 bool validate(GameState* state);
+
+/*
+prints number of solutions or error message if error occures
+
+returns true on fatal error
+*/
+bool print_solution_num(GameState* state);
 
 /*
 tries to set position on given game
@@ -82,9 +89,23 @@ bool try_set(GameState* state, int x, int y, int z);
 /*
 tries to undo/redo one move in given game state
 if successful prints board and changes, else prints error message
+
 returns true on fatal error
 */
 bool try_undo(GameState* state);
 bool try_redo(GameState* state);
+
+/*
+resets game to first state
+*/
+void reset(GameState* state);
+
+/*
+saves board to given file
+on edit mode saves only valid boards
+
+returns true on fatal error
+*/
+bool save_game(GameState* state, char* filename);
 
 #endif

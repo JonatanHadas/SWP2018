@@ -34,7 +34,7 @@ bool open_edit(GameState* state, char* filename){
 	return false;
 }
 
-#define DEFAULT_GAME_SIZE 3
+#define DEFAULT_GAME_SIZE 2
 
 bool open_default(GameState* state){
 	Game* new_game = create_game(DEFAULT_GAME_SIZE,DEFAULT_GAME_SIZE); /* load with fixed posiitons */
@@ -55,9 +55,8 @@ bool get_num_lim(char* str, int* out, int lower, int upper){
 }
 
 bool try_set(GameState* state, int x, int y, int z){
-	x--;y--; /* convert coordinates to start from 0 */
 	if(state->game->fixed[y][x]){
-		printf("Error: cell is fixed");
+		printf("Error: cell is fixed\n");
 	}
 	else{
 		/* clear undo list beyond current position */
@@ -115,6 +114,73 @@ bool try_redo(GameState* state){
 	}
 	else{
 		fprintf(stderr, "Error: no moves to redo\n");
+	}
+	return false;
+}
+
+void reset(GameState* state){
+	state->game->current_state = state->game->undo_list_tail = state->game->undo_list_head; /* shrink undo list to first state */
+	
+	if(state->game->current_state->next) free_board_list(state->game->current_state->next); /* clear rest of list */
+	
+	printf("Board reset\n");
+}
+
+bool validate(GameState* state){
+	Board* solution;
+	if(check_board(state->game->current_state->board)){
+		fprintf(stderr, "Error: board contains erroneous values\n");
+		return false;
+	}
+	solution = solve(state->game->current_state->board);
+	if(solution == NULL) return true;
+	if(solution == state->game->current_state->board){
+		printf("Validation failed: board is unsolvable\n");
+	}
+	else{
+		printf("Validation passed: board is solvable\n");
+	}
+	return false;
+}
+
+bool save_game(GameState* state, char* filename){
+	Board* solution;
+	if(state->mode == MODE_EDIT){
+		if(check_board(state->game->current_state->board)){
+			fprintf(stderr,"Error: board contains erroneous values\n");
+			return false;
+		}
+		solution = solve(state->game->current_state->board);
+		if(solution == NULL) return true;
+		if(solution == state->game->current_state->board){
+			fprintf(stderr, "Error: board validation failed\n");
+			return false;
+		}
+	}
+	if(save_board(state->game, filename, state->mode == MODE_EDIT)){
+		printf("Saved to: %s\n", filename);
+	}
+	else{
+		fprintf(stderr, "Error: File cannot be created or modified\n");
+	}
+	return false;
+}
+
+bool print_solution_num(GameState* state){
+	int sol_num; /* number of solutions */
+	if(check_board(state->game->current_state->board)){
+		fprintf(stderr, "Error: board contains erroneous values\n");
+		return false;
+	}
+	if(! count_solutions(state->game->current_state->board, &sol_num)){
+		return true; /* error */
+	}
+	printf("Number of solutions: %d\n", sol_num);
+	if(sol_num == 1){
+		printf("This is a good board!\n");
+	}
+	else if(sol_num > 1){
+		printf("The puzzle has more than 1 solution, try editing it further\n");
 	}
 	return false;
 }

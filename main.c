@@ -46,7 +46,7 @@ int main(){
 			break;
 		case CMD_HINT:
 			if(get_num_lim(params[0], &x, 1, N) && get_num_lim(params[1], &y, 1, N)){
-				if(hint(state.game, x, y)) error = true;
+				if(hint(state.game, x-1, y-1)) error = true;
 			}
 			break;
 		case CMD_AUTOFILL:
@@ -58,10 +58,11 @@ int main(){
 			break;
 		case CMD_SET:
 			if(get_num_lim(params[0],&x,1,N) && get_num_lim(params[1], &y,1,N) && get_num_lim(params[2], &z,0,N)){
-				if(try_set(&state, x, y, z)) error = true;
+				if(try_set(&state, x-1, y-1, z)) error = true;
 			}
 			break;
 		case CMD_VALIDATE:
+			if(validate(&state)) error = true;
 			break;
 		case CMD_UNDO:
 			if(try_undo(&state)) error = true;
@@ -70,10 +71,13 @@ int main(){
 			if(try_redo(&state)) error = true;
 			break;
 		case CMD_SAVE:
+			if(save_game(&state, params[0])) error = true;
 			break;
 		case CMD_COUNT_SOLUTIONS:
+			if(print_solution_num(&state)) error = true;
 			break;
 		case CMD_RESET:
+			reset(&state);
 			break;
 		default: /* should never be reached */
 			error = true;
