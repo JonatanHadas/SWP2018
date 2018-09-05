@@ -64,8 +64,10 @@ int main(){
 		case CMD_VALIDATE:
 			break;
 		case CMD_UNDO:
+			if(try_undo(&state)) error = true;
 			break;
 		case CMD_REDO:
+			if(try_redo(&state)) error = true;
 			break;
 		case CMD_SAVE:
 			break;

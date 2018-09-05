@@ -308,6 +308,7 @@ bool add_state(Game* game){
 	
 	if(game->undo_list_tail->next->board == NULL){ /* failure */
 		free_board_list(game->undo_list_tail->next); /* delete new node */
+		game->undo_list_tail->next = NULL;
 		return false;
 	}
 	

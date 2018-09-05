@@ -62,6 +62,7 @@ bool try_set(GameState* state, int x, int y, int z){
 	else{
 		/* clear undo list beyond current position */
 		if(state->game->current_state->next) free_board_list(state->game->current_state->next);
+		state->game->undo_list_tail = state->game->current_state;
 		
 		if(! add_state(state->game)){
 			return true; /* error */
@@ -86,5 +87,34 @@ bool try_set(GameState* state, int x, int y, int z){
 		}
 	}
 	
+	return false;
+}
+
+bool try_undo(GameState* state){
+	if(state->game->current_state->prev){ /* if previous state exists can undo */
+		state->game->current_state = state->game->current_state->prev; /* move back */
+		print_game(state); /* print board */
+		print_changes(
+				state->game->current_state->next->board,
+				state->game->current_state->board,
+				CHANGE_UNDO); /* print changes */
+	}
+	else{
+		fprintf(stderr, "Error: no moves to undo\n");
+	}
+	return false;
+}
+bool try_redo(GameState* state){
+	if(state->game->current_state->next){ /* if next state exists can redo */
+		state->game->current_state = state->game->current_state->next; /* move back */
+		print_game(state); /* print board */
+		print_changes(
+				state->game->current_state->prev->board,
+				state->game->current_state->board,
+				CHANGE_REDO); /* print changes */
+	}
+	else{
+		fprintf(stderr, "Error: no moves to redo\n");
+	}
 	return false;
 }

@@ -80,8 +80,11 @@ if board is complete go back to init mode
 bool try_set(GameState* state, int x, int y, int z);
 
 /*
-
+tries to undo/redo one move in given game state
+if successful prints board and changes, else prints error message
+returns true on fatal error
 */
-
+bool try_undo(GameState* state);
+bool try_redo(GameState* state);
 
 #endif
