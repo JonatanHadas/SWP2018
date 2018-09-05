@@ -22,7 +22,7 @@ tries to print hint for given board on given position
 
 if no hint can be made, prints message explaining why
 */
-void hint(Board* b, int x, int y);
+void hint(Game* g, int x, int y);
 
 /*
 given a non erronous board, returns a copy with obvious values added
