@@ -158,4 +158,9 @@ marks errors if mark_errors!=0
 */
 void print_board(Game* game, bool mark_errors);
 
+/*
+returns size (cell_w*cell_h) of given game
+*/
+int get_game_size(Game* game);
+
 #endif

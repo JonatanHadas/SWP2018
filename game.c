@@ -407,12 +407,12 @@ Game* load_board(char* filename, bool use_fixed){
 	FILE* file = fopen(filename, "r");
 	
 	if(file == NULL){
-		fprintf("Error: File doesn’t exist or cannot be opened\n");
+		fprintf(stderr, "Error: File doesn't exist or cannot be opened\n");
 		return NULL; /* unsuccessful in opening file */
 	}
 	
 	if(fscanf(file, "%d%d", &cell_h, &cell_w) != 2){
-		fprintf("Error: fscanf has failed\n");
+		fprintf(stderr, "Error: fscanf has failed\n");
 		fclose(file);
 		return NULL;
 	}
@@ -429,7 +429,7 @@ Game* load_board(char* filename, bool use_fixed){
 	for(pos = 0; pos < cell_w * cell_h * cell_w * cell_h; pos++){
 		char fixed_marker;
 		if(fscanf(file,"%d%c", (game->current_state->board->memory) + pos, &fixed_marker) != 2){ /* get number and character after it (could be fixed marker) */
-			fprintf("Error: fscanf has failed\n");
+			fprintf(stderr, "Error: fscanf has failed\n");
 			free_game(game);
 			fclose(file);
 			return NULL;
@@ -440,3 +440,9 @@ Game* load_board(char* filename, bool use_fixed){
 	
 	return game;
 }
+
+int get_game_size(Game* game){
+	Board* b = game->current_state->board;
+	return b->cell_w * b->cell_h;
+}
+
