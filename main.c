@@ -43,6 +43,7 @@ int main(){
 			finished = true;
 			break;
 		case CMD_MARK_ERRS:
+			get_bool(params[0],&state.mark_errors); /* set mark_errors to input */
 			break;
 		case CMD_HINT:
 			if(get_num_lim(params[0], &x, 1, N) && get_num_lim(params[1], &y, 1, N)){
@@ -50,8 +51,12 @@ int main(){
 			}
 			break;
 		case CMD_AUTOFILL:
+			if(try_autofill(&state)) error = true;
 			break;
 		case CMD_GENERATE:
+			if(get_num_lim(params[0], &x, 1, N*N) && get_num_lim(params[1], &y, 1, N*N)){
+				try_generate(&state, x, y);
+			}
 			break;
 		case CMD_PRINT:
 			print_game(&state);

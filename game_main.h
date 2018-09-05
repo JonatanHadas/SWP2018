@@ -17,6 +17,13 @@ if not print error message
 bool get_num_lim(char* str, int* out, int lower, int upper);
 
 /*
+read boolean from str to out
+return whether successful
+if not print error message
+*/
+bool get_bool(char* str, bool* out);
+
+/*
 this structure contains all game information
 */
 typedef struct game_state_struct{
@@ -107,5 +114,22 @@ on edit mode saves only valid boards
 returns true on fatal error
 */
 bool save_game(GameState* state, char* filename);
+
+/*
+if board is empty generate puzzle
+print all errors
+
+adds "add" random values, solves, removes all but "remain" values
+
+on fatal error return true
+*/
+bool try_generate(GameState* state, int add, int remain);
+
+/*
+tries to autofill board
+
+on fatal error return true
+*/
+bool try_autofill(GameState* state);
 
 #endif
