@@ -9,7 +9,10 @@ Board* create_board(int cell_w, int cell_h){
 	
 	/* allocate board structure */
 	new_board = malloc(sizeof(Board));
-	if(new_board == NULL) return NULL; /* return null pointer on failure */
+	if(new_board == NULL){
+		fprintf(stderr,"Error: malloc has failed\n");
+		return NULL; /* return null pointer on failure */
+	}
 	
 	new_board->cell_w = cell_w;
 	new_board->cell_h = cell_h;
@@ -17,6 +20,7 @@ Board* create_board(int cell_w, int cell_h){
 	/* allocate board memory: cell_w * cell_h rows and columns of integers (set by default to 0) */
 	new_board->memory = calloc(cell_w * cell_w * cell_h * cell_h, sizeof(int));
 	if(new_board->memory == NULL){ /* failure */
+		fprintf(stderr,"Error: calloc has failed\n");
 		free(new_board);
 		return NULL;
 	}
@@ -25,6 +29,7 @@ Board* create_board(int cell_w, int cell_h){
 	new_board->table = calloc(cell_w * cell_h, sizeof(int*));
 	
 	if(new_board->table == NULL){ /* failure */
+		fprintf(stderr,"Error: calloc has failed\n");
 		free(new_board->memory);
 		free(new_board);
 		return NULL;
@@ -193,7 +198,10 @@ BoardListNode* create_board_node(){
 	
 	node = malloc(sizeof(BoardListNode));
 	
-	if(node == NULL) return NULL; /* return null pointer on failure */
+	if(node == NULL){
+		fprintf(stderr,"Error: malloc has failed\n");
+		return NULL; /* return null pointer on failure */
+	}
 	
 	node->next = node->prev = NULL; /* initialize values */
 	node->board = NULL;
@@ -227,7 +235,10 @@ Game* create_game(int cell_w, int cell_h){
 	/* allocate game structure */
 	game = malloc(sizeof(Game));
 	
-	if(game==NULL) return NULL; /* return NULL on failure */
+	if(game==NULL){
+		fprintf(stderr,"Error: malloc has failed\n");
+		return NULL; /* return NULL on failure */
+	}
 	
 	/* create list of one state */
 	game->undo_list_head = game->undo_list_tail = game->current_state = create_board_node();
@@ -249,6 +260,7 @@ Game* create_game(int cell_w, int cell_h){
 	game->memory = calloc(cell_w*cell_w*cell_h*cell_h, sizeof(bool));
 	
 	if(game->memory == NULL){
+		fprintf(stderr,"Error: calloc has failed\n");
 		free_board_list(game->undo_list_head);
 		free(game);
 		return NULL;
@@ -258,6 +270,7 @@ Game* create_game(int cell_w, int cell_h){
 	game->fixed = calloc(cell_w*cell_h, sizeof(bool*));
 	
 	if(game->fixed == NULL){
+		fprintf(stderr,"Error: calloc has failed\n");
 		free(game->memory);
 		free_board_list(game->undo_list_head);
 		free(game);

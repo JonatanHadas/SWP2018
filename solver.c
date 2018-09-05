@@ -2,7 +2,7 @@
 
 #include <stdlib.h> /* malloc */
 
-int count_solutions(Board* board){
+bool count_solutions(Board* board, int* number){
 	int empty_num; /* number of empty places */
 	
 	/*
@@ -16,10 +16,23 @@ int count_solutions(Board* board){
 	int count = 0;  /* solution counter */
 	
 	
-	if(check_board(board)) {return 0;} /* board is erronous */
+	if(check_board(board)) {
+		number = 0;
+		return true;
+	} /* board is erronous */
 	
 	x_stack = calloc(board->cell_w * board->cell_h * board->cell_w * board->cell_h, sizeof(int));
+	if(x_stack == NULL){
+		fprintf(stderr,"Error: calloc has failed\n");
+		return false;
+	}
+	
 	y_stack = calloc(board->cell_w * board->cell_h * board->cell_w * board->cell_h, sizeof(int));
+	if(y_stack == NULL){
+		fprintf(stderr,"Error: calloc has failed\n");
+		free(x_stack);
+		return false;
+	}
 	
 	/* positions on the stack always remain the same, so we will calculate them before the recursion */
 	empty_num = count_empty_places(board, x_stack, y_stack);
@@ -52,7 +65,8 @@ int count_solutions(Board* board){
 	free(x_stack);
 	free(y_stack);
 	
-	return count;
+	number = count;
+	return true; /* success */
 }
 
 Board* solve(Board* board){
@@ -76,11 +90,13 @@ Board* solve(Board* board){
 	
 	x_stack = calloc(board->cell_w * board->cell_h * board->cell_w * board->cell_h, sizeof(int));
 	if(x_stack == NULL){
+		fprintf(stderr,"Error: calloc has failed\n");
 		free_board(new_board);
 		return NULL;
 	}
 	y_stack = calloc(board->cell_w * board->cell_h * board->cell_w * board->cell_h, sizeof(int));
 	if(y_stack == NULL){
+		fprintf(stderr,"Error: calloc has failed\n");
 		free(x_stack);
 		free_board(new_board);
 		return NULL;

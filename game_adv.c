@@ -1,6 +1,6 @@
 #include "game_adv.h"
 
-#include <stdlib.h> /* malloc */
+#include <stdlib.h> /* malloc, rand */
 
 #include <stdio.h>
 
@@ -12,7 +12,10 @@ Board* autofill(Board* board){
 	int num_changes = 0;
 	
 	values = calloc(N,sizeof(int));
-	if(values == NULL) return NULL;
+	if(values == NULL){
+		fprintf(stderr,"Error: calloc has failed\n");
+		return NULL;
+	}
 	
 	new_board = copy_board(board);
 	if(new_board == NULL){
@@ -105,10 +108,14 @@ Board* generate(Board* b, int add, int remaining){
 	allocate memory
 	*/
 	values = calloc(N,sizeof(int));
-	if(values == NULL) return NULL;
+	if(values == NULL){
+		fprintf(stderr,"Error: calloc has failed\n");
+		return NULL;
+	}
 
 	positions = calloc(N*N,sizeof(int));
 	if(positions == NULL){
+		fprintf(stderr,"Error: calloc has failed\n");
 		free(values);
 		return NULL;
 	}
