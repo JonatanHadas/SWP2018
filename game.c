@@ -170,6 +170,24 @@ int count_empty_places(Board* board, int* xs, int* ys){
 	return count;
 }
 
+int count_legal_values(Board* board, int x, int y, int* z){
+	int count = 0,num;
+	
+	if(board->table[y][x] != 0){ /* position not empty */
+		return -1;
+	}
+	/* go over all numbers */
+	for(num=1; num <= board->cell_w*board->cell_h; num++){
+		board->table[y][x] = num;
+		if(! check_position(board,x,y)){ /* check if value is legal */
+			z[count] = num;
+			count++;
+		}
+	}
+	board->table[y][x] = 0; /* reset back to empty */
+	return count;
+}
+
 BoardListNode* create_board_node(){
 	BoardListNode* node; /* new node */
 	
