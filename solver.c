@@ -5,8 +5,8 @@
 #include <stdlib.h> /* malloc */
 
 #include <stdio.h> /* for formating gurobi condition names */
+bool count_solutions(Board* board, int* number){
 
-int count_solutions(Board* board){
 	int empty_num; /* number of empty places */
 	
 	/*
@@ -20,10 +20,23 @@ int count_solutions(Board* board){
 	int count = 0;  /* solution counter */
 	
 	
-	if(check_board(board)) {return 0;} /* board is erronous */
+	if(check_board(board)) {
+		number = 0;
+		return true;
+	} /* board is erronous */
 	
 	x_stack = calloc(board->cell_w * board->cell_h * board->cell_w * board->cell_h, sizeof(int));
+	if(x_stack == NULL){
+		fprintf(stderr,"Error: calloc has failed\n");
+		return false;
+	}
+	
 	y_stack = calloc(board->cell_w * board->cell_h * board->cell_w * board->cell_h, sizeof(int));
+	if(y_stack == NULL){
+		fprintf(stderr,"Error: calloc has failed\n");
+		free(x_stack);
+		return false;
+	}
 	
 	/* positions on the stack always remain the same, so we will calculate them before the recursion */
 	empty_num = count_empty_places(board, x_stack, y_stack);
@@ -56,7 +69,8 @@ int count_solutions(Board* board){
 	free(x_stack);
 	free(y_stack);
 	
-	return count;
+	*number = count;
+	return true; /* success */
 }
 
 Board* solve(Board* board){
@@ -184,21 +198,21 @@ Board* solve(Board* board){
 					free(val);
 					GRBfreemodel(model);
 					GRBfreeenv(env);
-		fprintf(stderr,"Error in Gurobi: %s\n", GRBgeterrormsg(env));
+					fprintf(stderr,"Error in Gurobi: %s\n", GRBgeterrormsg(env));
 					return NULL;
 				}
 			}
 			else{
 				num = board->table[y][x]-1;
 				ind[0] = N*N*x + N*y + num;
-				val[num] = 1;
+				val[0] = 1;
 				if(GRBaddconstr(model, 1, ind, val, GRB_EQUAL, 1, name)){
 					free(sol);
 					free(ind);
 					free(val);
 					GRBfreemodel(model);
 					GRBfreeenv(env);
-		fprintf(stderr,"Error in Gurobi: %s\n", GRBgeterrormsg(env));
+					fprintf(stderr,"Error in Gurobi: %s\n", GRBgeterrormsg(env));
 					return NULL;
 				}
 			}

@@ -195,11 +195,13 @@ CommandType get_command(GameMode mode, char** params, int* param_num){
 		else{ /* eof reached or error encountered */
 			if(ferror(stdin)){
 				/* error in input reading */
-				printf("Error in function fgets\n");
+				fprintf(stderr,"Error: fgets has failed\n");
 				/* exit */
+				return CMD_EXIT;
 			}
 			else{
 				/* EOF reached */
+				return CMD_EXIT;
 			}
 		}
 	}

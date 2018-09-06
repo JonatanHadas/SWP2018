@@ -9,7 +9,10 @@ Board* create_board(int cell_w, int cell_h){
 	
 	/* allocate board structure */
 	new_board = malloc(sizeof(Board));
-	if(new_board == NULL) return NULL; /* return null pointer on failure */
+	if(new_board == NULL){
+		fprintf(stderr,"Error: malloc has failed\n");
+		return NULL; /* return null pointer on failure */
+	}
 	
 	new_board->cell_w = cell_w;
 	new_board->cell_h = cell_h;
@@ -17,6 +20,7 @@ Board* create_board(int cell_w, int cell_h){
 	/* allocate board memory: cell_w * cell_h rows and columns of integers (set by default to 0) */
 	new_board->memory = calloc(cell_w * cell_w * cell_h * cell_h, sizeof(int));
 	if(new_board->memory == NULL){ /* failure */
+		fprintf(stderr,"Error: calloc has failed\n");
 		free(new_board);
 		return NULL;
 	}
@@ -25,6 +29,7 @@ Board* create_board(int cell_w, int cell_h){
 	new_board->table = calloc(cell_w * cell_h, sizeof(int*));
 	
 	if(new_board->table == NULL){ /* failure */
+		fprintf(stderr,"Error: calloc has failed\n");
 		free(new_board->memory);
 		free(new_board);
 		return NULL;
@@ -142,8 +147,8 @@ void print_changes(Board* first, Board* second, ChangeType t){
 	int x,y; /* position on board */
 	
 	/* go over board */
-	for(x = 0; x < first->cell_w*first->cell_h; x++){
-		for(y = 0; y < first->cell_w*first->cell_h; y++){
+	for(y = 0; y < first->cell_w*first->cell_h; y++){
+		for(x = 0; x < first->cell_w*first->cell_h; x++){
 			if(first->table[y][x] != second->table[y][x]){ /* changed */
 				print_change(x,y,first->table[y][x],second->table[y][x], t);
 			}
@@ -193,7 +198,10 @@ BoardListNode* create_board_node(){
 	
 	node = malloc(sizeof(BoardListNode));
 	
-	if(node == NULL) return NULL; /* return null pointer on failure */
+	if(node == NULL){
+		fprintf(stderr,"Error: malloc has failed\n");
+		return NULL; /* return null pointer on failure */
+	}
 	
 	node->next = node->prev = NULL; /* initialize values */
 	node->board = NULL;
@@ -227,7 +235,10 @@ Game* create_game(int cell_w, int cell_h){
 	/* allocate game structure */
 	game = malloc(sizeof(Game));
 	
-	if(game==NULL) return NULL; /* return NULL on failure */
+	if(game==NULL){
+		fprintf(stderr,"Error: malloc has failed\n");
+		return NULL; /* return NULL on failure */
+	}
 	
 	/* create list of one state */
 	game->undo_list_head = game->undo_list_tail = game->current_state = create_board_node();
@@ -249,6 +260,7 @@ Game* create_game(int cell_w, int cell_h){
 	game->memory = calloc(cell_w*cell_w*cell_h*cell_h, sizeof(bool));
 	
 	if(game->memory == NULL){
+		fprintf(stderr,"Error: calloc has failed\n");
 		free_board_list(game->undo_list_head);
 		free(game);
 		return NULL;
@@ -258,6 +270,7 @@ Game* create_game(int cell_w, int cell_h){
 	game->fixed = calloc(cell_w*cell_h, sizeof(bool*));
 	
 	if(game->fixed == NULL){
+		fprintf(stderr,"Error: calloc has failed\n");
 		free(game->memory);
 		free_board_list(game->undo_list_head);
 		free(game);
@@ -295,6 +308,7 @@ bool add_state(Game* game){
 	
 	if(game->undo_list_tail->next->board == NULL){ /* failure */
 		free_board_list(game->undo_list_tail->next); /* delete new node */
+		game->undo_list_tail->next = NULL;
 		return false;
 	}
 	
@@ -394,10 +408,15 @@ Game* load_board(char* filename, bool use_fixed){
 	FILE* file = fopen(filename, "r");
 	
 	if(file == NULL){
+		fprintf(stderr, "Error: File doesn't exist or cannot be opened\n");
 		return NULL; /* unsuccessful in opening file */
 	}
 	
-	fscanf(file, "%d%d", &cell_h, &cell_w);
+	if(fscanf(file, "%d%d", &cell_h, &cell_w) != 2){
+		fprintf(stderr, "Error: fscanf has failed\n");
+		fclose(file);
+		return NULL;
+	}
 
 	game = create_game(cell_w, cell_h);
 	
@@ -410,10 +429,21 @@ Game* load_board(char* filename, bool use_fixed){
 	/* saving oreder is same as oreder in memory */
 	for(pos = 0; pos < cell_w * cell_h * cell_w * cell_h; pos++){
 		char fixed_marker;
-		fscanf(file,"%d%c", (game->current_state->board->memory) + pos, &fixed_marker); /* get number and character after it (could be fixed marker) */
+		if(fscanf(file,"%d%c", (game->current_state->board->memory) + pos, &fixed_marker) != 2){ /* get number and character after it (could be fixed marker) */
+			fprintf(stderr, "Error: fscanf has failed\n");
+			free_game(game);
+			fclose(file);
+			return NULL;
+		}
 		
 		if(use_fixed && fixed_marker == '.') game->memory[pos] = true; /* mark position as fixed */ 
 	}
 	
 	return game;
 }
+
+int get_game_size(Game* game){
+	Board* b = game->current_state->board;
+	return b->cell_w * b->cell_h;
+}
+

@@ -10,15 +10,15 @@ contains functions for solving sudoku boards
 /*
 generates a solved copy of given board, returns null pointer if no solution exists
 on failure returns same pointer
-on allocation error returns null
+on error returns null
 */
 Board* solve(Board* board);
 
 /*
-returns number of possible solutions to given board
-
+outputs number of possible solutions to given board to "number"
+returns whether succeded
 also prints gurobi errors
 */
-int count_solutions(Board* board);
+bool count_solutions(Board* board, int* number);
 
 #endif
