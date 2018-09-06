@@ -147,8 +147,8 @@ void print_changes(Board* first, Board* second, ChangeType t){
 	int x,y; /* position on board */
 	
 	/* go over board */
-	for(x = 0; x < first->cell_w*first->cell_h; x++){
-		for(y = 0; y < first->cell_w*first->cell_h; y++){
+	for(y = 0; y < first->cell_w*first->cell_h; y++){
+		for(x = 0; x < first->cell_w*first->cell_h; x++){
 			if(first->table[y][x] != second->table[y][x]){ /* changed */
 				print_change(x,y,first->table[y][x],second->table[y][x], t);
 			}
