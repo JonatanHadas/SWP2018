@@ -74,6 +74,13 @@ returns true if fatal error occurred
 bool validate(GameState* state);
 
 /*
+if given game board is full (solve mode only)
+check and print if it is solved
+if it is go to init mode
+*/
+void check_win(GameState* state);
+
+/*
 prints number of solutions or error message if error occures
 
 returns true on fatal error

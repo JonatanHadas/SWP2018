@@ -81,18 +81,7 @@ bool try_set(GameState* state, int x, int y, int z){
 		state->game->current_state->board->table[y][x] = z;
 				
 		print_game(state);
-		if(state->mode == MODE_SOLVE && count_empty_places(state->game->current_state->board, NULL, NULL) == 0){
-			/* full board */
-			if(check_board(state->game->current_state->board)){
-				printf("Puzzle solution erroneous\n");
-			}
-			else{
-				printf("Puzzle solved successfully\n");
-				free_game(state->game); /* claer game and set to init */
-				state->game = NULL;
-				state->mode = MODE_INIT;
-			}
-		}
+		check_win(state);
 	}
 	
 	return false;
@@ -249,5 +238,21 @@ bool try_autofill(GameState* state){
 			state->game->current_state->board,
 			CHANGE_SET);
 	print_game(state);
+	check_win(state); /* check for end condition */
 	return false;
+}
+
+void check_win(GameState* state){
+	if(state->mode == MODE_SOLVE && count_empty_places(state->game->current_state->board, NULL, NULL) == 0){
+		/* full board */
+		if(check_board(state->game->current_state->board)){
+			printf("Puzzle solution erroneous\n");
+		}
+		else{
+			printf("Puzzle solved successfully\n");
+			free_game(state->game); /* claer game and set to init */
+			state->game = NULL;
+			state->mode = MODE_INIT;
+		}
+	}
 }
