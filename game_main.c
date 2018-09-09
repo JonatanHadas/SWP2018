@@ -217,7 +217,14 @@ bool try_generate(GameState* state, int add, int remain){
 }
 
 bool try_autofill(GameState* state){
-	Board* new = autofill(state->game->current_state->board);
+	Board* new;
+	
+	if(check_board(state->game->current_state->board)){
+		fprintf(stderr, "Error: board contains erroneous values\n");
+		return false;
+	}
+	
+	new = autofill(state->game->current_state->board);
 	if(new == NULL) return true; /* error */
 	if(new == state->game->current_state->board) return false; /* no changes */
 
