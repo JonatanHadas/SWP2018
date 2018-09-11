@@ -11,7 +11,7 @@ void print_game(GameState* state){
 void set_init(GameState* state){
 	state->game = NULL;
 	state->mode = MODE_INIT;
-	state->mark_errors = false;
+	state->mark_errors = true;
 }
 
 bool open_solve(GameState* state, char* filename){
