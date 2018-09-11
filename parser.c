@@ -66,7 +66,6 @@ newline char is removed
 
 str must be at least 2 characters longer than MAX_COMMAND_LENGTH
 
-exactly MAX_COMMAND_LENGTH non-newline characters are read (if line is too long then there is some left to be read)
 */
 int get_line(char* str){
 	if(fgets(str, MAX_COMMAND_LENGTH+2, stdin)){
@@ -79,8 +78,6 @@ int get_line(char* str){
 		}
 		/* if no new line was found, either line is too long or eof was reached */
 		if(len > MAX_COMMAND_LENGTH){
-			/* extra character that is read returned */
-			ungetc(' ', stdin); /* line is already to long- does not matter what this character was */ 
 			return -1; /* line was too long */
 		}
 		return 1; /* success */
