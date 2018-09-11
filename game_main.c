@@ -21,6 +21,7 @@ bool open_solve(GameState* state, char* filename){
 	if(state->game) free_game(state->game); /* delete old game */
 	state->game = new_game;
 	state->mode = MODE_SOLVE;
+	print_game(state);
 	return false;
 }
 
@@ -31,6 +32,7 @@ bool open_edit(GameState* state, char* filename){
 	if(state->game) free_game(state->game);
 	state->game = new_game;
 	state->mode = MODE_EDIT;
+	print_game(state);
 	return false;
 }
 
@@ -43,6 +45,7 @@ bool open_default(GameState* state){
 	if(state->game) free_game(state->game);
 	state->game = new_game;
 	state->mode = MODE_EDIT;
+	print_game(state);
 	return false;
 }
 
@@ -122,6 +125,7 @@ void reset(GameState* state){
 	if(state->game->current_state->next) free_board_list(state->game->current_state->next); /* clear rest of list */
 	
 	printf("Board reset\n");
+	print_game(state);
 }
 
 bool validate(GameState* state){
