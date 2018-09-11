@@ -408,7 +408,8 @@ Game* load_board(char* filename, bool use_fixed){
 	FILE* file = fopen(filename, "r");
 	
 	if(file == NULL){
-		fprintf(stderr, "Error: File doesn't exist or cannot be opened\n");
+		/* there are different errors for edit(use_fixed) and solve(!use_fixed) */
+		fprintf(stderr, use_fixed ? "Error: File cannot be opened\n" : "Error: File doesn't exist or cannot be opened\n");
 		return NULL; /* unsuccessful in opening file */
 	}
 	
