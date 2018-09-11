@@ -49,22 +49,6 @@ bool open_default(GameState* state){
 	return false;
 }
 
-bool get_num_lim(char* str, int* out, int lower, int upper){
-	if(! get_int_param(str, out) || *out < lower || *out > upper){
-		fprintf(stderr, "Error: value not in range %d-%d\n", lower, upper);
-		return false;
-	}
-	return true;
-}
-bool get_bool(char* str, bool* out){
-	int num;
-	if(! get_int_param(str, &num) || num < 0 || num > 1){
-		fprintf(stderr, "Error: the value should be 0 or 1\n");
-		return false;
-	}
-	*out = (num == 1); /* 1 for true, 0 for false */
-	return true;
-}
 
 bool try_set(GameState* state, int x, int y, int z){
 	if(state->game->fixed[y][x]){

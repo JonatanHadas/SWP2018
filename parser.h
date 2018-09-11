@@ -44,6 +44,20 @@ returns whether succeeded
 bool get_int_param(char* str, int* param);
 
 /*
+read int from str to out, in given limits (lower-upper)
+return whether successful
+if not print error message (use lower_print for lower bound error message)
+*/
+bool get_num_lim(char* str, int* out, int lower, int upper, int lower_print);
+
+/*
+read boolean from str to out
+return whether successful
+if not print error message
+*/
+bool get_bool(char* str, bool* out);
+
+/*
 gets command from command line,
 given the game mode (init, solve or edit)
 returns type of command

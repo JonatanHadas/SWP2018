@@ -9,19 +9,6 @@ game mainloop module, implements gameplay and user interaction
 #include "game_adv.h"
 #include "parser.h"
 
-/*
-read int from str to out, in given limits (lower-upper)
-return whether successful
-if not print error message
-*/
-bool get_num_lim(char* str, int* out, int lower, int upper);
-
-/*
-read boolean from str to out
-return whether successful
-if not print error message
-*/
-bool get_bool(char* str, bool* out);
 
 /*
 this structure contains all game information
