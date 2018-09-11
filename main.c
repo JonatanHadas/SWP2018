@@ -29,6 +29,8 @@ int main(){
 	
 	set_init(&state);
 	
+	printf("Sudoku\n------\n"); /* title */
+	
 	while(!(error || finished)){
 		int N = state.game ? get_game_size(state.game) : 0; /* get game size */
 		switch(get_command(state.mode, params, &param_num)){
