@@ -65,6 +65,8 @@ returns 1 on success
 newline char is removed
 
 str must be at least 2 characters longer than MAX_COMMAND_LENGTH
+
+exactly MAX_COMMAND_LENGTH non-newline characters are read (if line is too long then there is some left to be read)
 */
 int get_line(char* str){
 	if(fgets(str, MAX_COMMAND_LENGTH+2, stdin)){
@@ -76,7 +78,11 @@ int get_line(char* str){
 			}
 		}
 		/* if no new line was found, either line is too long or eof was reached */
-		if(len > MAX_COMMAND_LENGTH) return -1; /* line was too long */
+		if(len > MAX_COMMAND_LENGTH){
+			/* extra character that is read returned */
+			ungetc(' ', stdin); /* line is already to long- does not matter what this character was */ 
+			return -1; /* line was too long */
+		}
 		return 1; /* success */
 	}
 	return 0; /* fgets failed (EOF reached) */
@@ -151,42 +157,55 @@ int min_param_nums[COMMAND_NUM] = {1,0,1,0,3,0,2,0,0,1,2,0,0,0,0};
 int max_param_nums[COMMAND_NUM] = {1,1,1,0,3,0,2,0,0,1,2,0,0,0,0};
 	
 CommandType get_command(GameMode mode, char** params, int* param_num){
+	
+	bool in_long = false; /* saves whether last input was too long */
 	char command[MAX_COMMAND_LENGTH + 2]; /* extra place for nullchar and newline*/
 	
 	while(true){
 		char* str = command; /* current position in command string */
 		int line_code; /* get_line's return code */
 		
-		printf("Enter your command:\n");
+		if(!in_long) printf("Enter your command:\n");
 		
 		if((line_code = get_line(command))){
 			/* no error */
-			str = skip_blank(str);
-			
-			if(str[0] == '\0') continue; /* blank line */
-			
+			if(line_code == -1){
+				in_long = true;
+				continue; /* keep reading line to end */
+			}
 			if(line_code > 0){ /* line is short enough */
-				/* check all possible command names */
-				int i;
-				for(i = 0; i<COMMAND_NUM; i++){
-					if(is_valid(commands[i], mode) && compare_command(str, command_texts[i])){
-						/* parse parameters */
-						str += strlen(command_texts[i]); /* go to end of command */
-						for(*param_num = 0; *param_num<max_param_nums[i];(*param_num)++){ /* iterate through all possible parameters */
-							char* next_pos; /* position at end of argument */
-							
-							str = skip_blank(str); /* skip blank char */
-							next_pos = copy_until_blank(str, params[(*param_num)]); /* copy parameter and increase number */
-							if(next_pos == str){ /* no more parameters */
-								break;
+				
+				
+				if(in_long){ /* end of long line */
+					in_long = false;
+				}
+				else{
+					/* check all possible command names */
+					int i;
+
+					str = skip_blank(str);
+								
+					if(str[0] == '\0') continue; /* blank line */
+					
+					for(i = 0; i<COMMAND_NUM; i++){
+						if(is_valid(commands[i], mode) && compare_command(str, command_texts[i])){
+							/* parse parameters */
+							str += strlen(command_texts[i]); /* go to end of command */
+							for(*param_num = 0; *param_num<max_param_nums[i];(*param_num)++){ /* iterate through all possible parameters */
+								char* next_pos; /* position at end of argument */
+								
+								str = skip_blank(str); /* skip blank char */
+								next_pos = copy_until_blank(str, params[(*param_num)]); /* copy parameter and increase number */
+								if(next_pos == str){ /* no more parameters */
+									break;
+								}
+								str = next_pos; /* advance str */
 							}
-							str = next_pos; /* advance str */
+							if(*param_num >= min_param_nums[i])  return commands[i]; /* command is completely valid */
+							break; /* only one command can be matched, no need to check others */
 						}
-						if(*param_num >= min_param_nums[i])  return commands[i]; /* command is completely valid */
-						break; /* only one command can be matched, no need to check others */
 					}
 				}
-				
 				/* if no command matches than command is invalid */
 			}
 			
