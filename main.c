@@ -33,6 +33,7 @@ int main(){
 	
 	while(!(error || finished)){
 		int N = state.game ? get_game_size(state.game) : 0; /* get game size */
+		int E = state.game ? count_empty_places(state.game->current_state->board, NULL, NULL) : 0; /* number of empty cells, locations are not saved */
 		switch(get_command(state.mode, params, &param_num)){
 		case CMD_SOLVE:
 			if(open_solve(&state, params[0])) error = true;
@@ -56,7 +57,7 @@ int main(){
 			if(try_autofill(&state)) error = true;
 			break;
 		case CMD_GENERATE:
-			if(get_num_lim(params[0], &x, 0, N*N, 0) && get_num_lim(params[1], &y, 0, N*N, 0)){
+			if(get_num_lim(params[0], &x, 0, E, 0) && get_num_lim(params[1], &y, 0, E, 0)){
 				try_generate(&state, x, y);
 			}
 			break;
